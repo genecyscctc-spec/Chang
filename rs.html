@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Be My Valentine</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #ff758f, #ff7eb3);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Floating hearts & roses */
+.floating {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.floating span {
+    position: absolute;
+    bottom: -50px;
+    font-size: 24px;
+    animation: floatUp linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+    10% { opacity: 1; }
+    100% {
+        transform: translateY(-110vh) scale(1.3);
+        opacity: 0;
+    }
+}
+
+/* Main card */
+.container {
+    background: rgba(255,255,255,0.95);
+    padding: 25px;
+    border-radius: 22px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    text-align: center;
+    z-index: 2;
+    width: 90%;
+    max-width: 360px;
+}
+
+h1 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+.name {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.6rem;
+    color: #e63946;
+    margin-bottom: 18px;
+}
+
+/* Buttons */
+.buttons {
+    position: relative;
+    height: 120px;
+}
+
+button {
+    padding: 12px 26px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#yesBtn {
+    background: #e63946;
+    color: #fff;
+}
+
+#noBtn {
+    background: #999;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 60px;
+}
+
+/* Popup */
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 25px;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+    animation: pop 0.5s ease;
+}
+
+@keyframes pop {
+    from { transform: scale(0.6); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: fall linear forwards;
+    z-index: 10;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Floating emojis -->
+<div class="floating" id="floating"></div>
+
+<div class="container">
+    <h1>Will you be my Valentine?</h1>
+    <div class="name">Roselle Joy</div>
+
+    <div class="buttons">
+        <button id="yesBtn">Yes 💖</button>
+        <button id="noBtn">No 😢</button>
+    </div>
+</div>
+
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h2>She said YES! 💕</h2>
+        <p>
+            Roselle Joy, thank you for choosing me.  
+            You make my world brighter, happier, and full of love. 🌹
+        </p>
+        <strong>Happy Valentine’s Day ❤️</strong>
+    </div>
+</div>
+
+<script>
+/* Floating hearts & roses */
+const floating = document.getElementById("floating");
+const emojis = ["❤️","🌹","💖","💕","🌸"];
+
+for (let i = 0; i < 30; i++) {
+    const span = document.createElement("span");
+    span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    span.style.left = Math.random() * 100 + "vw";
+    span.style.animationDuration = (Math.random() * 5 + 5) + "s";
+    span.style.fontSize = (Math.random() * 20 + 20) + "px";
+    floating.appendChild(span);
+}
+
+/* No button movement */
+const noBtn = document.getElementById("noBtn");
+const reasons = [
+    "Sure ka na? 🥺",
+    "What if I hug you? 🤍",
+    "Please? 😭",
+    "I’ll bring flowers 🌹",
+    "Think again 😏"
+];
+let index = 0;
+
+function moveNo() {
+    const x = Math.random() * 60 + 20;
+    const y = Math.random() * 50 + 40;
+    noBtn.style.left = x + "%";
+    noBtn.style.top = y + "px";
+    noBtn.innerText = reasons[index % reasons.length];
+    index++;
+}
+
+noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("mouseover", moveNo);
+
+/* Yes button */
+const yesBtn = document.getElementById("yesBtn");
+const popup = document.getElementById("popup");
+
+yesBtn.addEventListener("click", () => {
+    popup.style.display = "flex";
+    confetti();
+});
+
+/* Confetti effect */
+function confetti() {
+    for (let i = 0; i < 100; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.backgroundColor =
+            ["#e63946","#ff006e","#ffd166","#8338ec"][Math.floor(Math.random()*4)];
+        c.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4000);
+    }
+}
+</script>
+
+</body>
+</html>
